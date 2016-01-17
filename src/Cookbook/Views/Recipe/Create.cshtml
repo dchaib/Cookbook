@@ -1,0 +1,325 @@
+﻿@model Cookbook.ViewModels.Recipe.CreateViewModel
+
+@inject IJsonHelper Json;
+
+<div class="pull-right">
+    <select class="form-control" data-bind="options: cultures, optionsText: 'text', optionsValue: 'key', value: selectedCulture"></select>
+</div>
+
+<h2>Create a recipe</h2>
+
+<div class="row">
+    <form class="form-horizontal" data-bind="with: recipe">
+        <!-- ko with: currentLocalization -->
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">Title</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="title" placeholder="Title" data-bind="value: title" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">Description</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="description" placeholder="Description" data-bind="value: description"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="notes" class="col-sm-2 control-label">Notes</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="notes" placeholder="Notes" data-bind="value: notes"></textarea>
+            </div>
+        </div>
+        <!-- /ko -->
+
+        <div class="form-group">
+            <label for="servingCount" class="col-sm-2 control-label">Serving count</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="servingCount" placeholder="Serving count" data-bind="value: servingCount" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="difficultyIndex" class="col-sm-2 control-label">Difficulty</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="difficultyIndex" placeholder="Difficulty (from 1 to 5)" data-bind="value: difficultyIndex" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="costIndex" class="col-sm-2 control-label">Cost</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="costIndex" placeholder="Cost (from 1 to 5)" data-bind="value: costIndex" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="privateNotes" class="col-sm-2 control-label">Private notes</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="privateNotes" placeholder="Private notes" data-bind="value: privateNotes"></textarea>
+            </div>
+        </div>
+
+        <!-- ko foreach: parts -->
+        <div style="margin-top: 50px; margin-bottom: 50px;">
+            <!-- ko if: $parent.parts().length > 1 -->
+            <!-- ko with: currentLocalization -->
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" placeholder="Name" data-bind="value: name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="description" placeholder="Description" data-bind="value: description"></textarea>
+                </div>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+            <div class="form-group">
+                <label for="preparationTime" class="col-sm-2 control-label">Preparation time</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="preparationTime" placeholder="Preparation time" data-bind="value: preparationTime" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cookingTime" class="col-sm-2 control-label">Cooking time</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="cookingTime" placeholder="Cooking time" data-bind="value: cookingTime" />
+                </div>
+            </div>
+            <!-- ko with: currentLocalization -->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Ingredients</label>
+                <div class="col-sm-10">
+                    <ul data-bind="foreach: ingredients" class="list-unstyled">
+                        <li>
+                            <div class="pull-right" data-bind="if: element">
+                                <a href="#" data-bind="click: $root.removeIngredient"><span class="glyphicon glyphicon-trash"></span></a>
+                            </div>
+                            <fieldset class="form-inline">
+                                <div class="form-group">
+                                    <label class="sr-only" for="">Name</label>
+                                    <input type="text" class="form-control" id="" placeholder="Name" data-bind="value: element" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="">Quantity</label>
+                                    <input type="text" class="form-control" id="" placeholder="Quantity" data-bind="value: quantity" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="">Unit</label>
+                                    <input type="text" class="form-control" id="" placeholder="Unit" data-bind="value: unit" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="">Comment</label>
+                                    <input type="text" class="form-control" id="" placeholder="Comment" data-bind="value: comment" />
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" data-bind="value: isOptional"> Optional
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="instructions" class="col-sm-2 control-label">Instructions</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="instructions" placeholder="Instructions" data-bind="value: instructions"></textarea>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <button class="btn btn-default" data-bind="click: addNewPart">Add part</button>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Create</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function Recipe(data) {
+            var that = this;
+            this.costIndex = ko.observable();
+            this.currentLocalization = ko.observable();
+            this.difficultyIndex = ko.observable();
+            this.localizations = ko.observableArray();
+            this.parts = ko.observableArray();
+            this.privateNotes = ko.observable();
+            this.servingCount = ko.observable();
+
+            if (data)
+            {
+                this.costIndex(data.costIndex);
+                this.difficultyIndex(data.difficultyIndex);
+                if(data.localizations) {
+                    for (var i = 0; i < data.localizations.length; i++) {
+                        this.localizations.push(new RecipeLocalization(data.localizations[i]));
+                    }
+                }
+                if(data.parts) {
+                    for (var i = 0; i < data.parts.length; i++) {
+                        this.parts.push(new RecipePart(data.parts[i]));
+                    }
+                }
+                this.privateNotes(data.privateNotes);
+                this.servingCount(data.servingCount);
+            }
+
+            this.addNewPart = function () {
+                var newPart = new RecipePart();
+                if(that.currentLocalization()) {
+                    newPart.updateCurrentCulture(that.currentLocalization().culture());
+                }
+                that.parts.push(newPart);
+            }
+
+            if (this.parts().length == 0) {
+                this.addNewPart();            
+            }
+
+            this.updateCurrentCulture = function(newCulture) {                
+                var newLocalization;
+                for (var i = 0; i < that.localizations().length; i++) {
+                    if (that.localizations()[i].culture() === newCulture) {
+                        newLocalization = that.localizations()[i];                    
+                    }
+                }
+                if (!newLocalization) {
+                    newLocalization = new RecipeLocalization();
+                    newLocalization.culture(newCulture);
+                    that.localizations.push(newLocalization);
+                }
+                that.currentLocalization(newLocalization);
+                for (var i = 0; i < that.parts().length; i++) {
+                    that.parts()[i].updateCurrentCulture(newCulture);
+                }
+            }
+        }
+        function RecipeLocalization(data) {
+            this.culture = ko.observable();
+            this.description = ko.observable();
+            this.notes = ko.observable();
+            this.title = ko.observable();
+
+            if(data)
+            {
+                this.culture(data.culture);
+                this.description(data.description);
+                this.notes(data.notes);
+                this.title(data.title);
+            }
+        }
+        function RecipePart(data) {
+            var that = this;
+            this.cookingTime = ko.observable();
+            this.currentLocalization = ko.observable();
+            this.localizations = ko.observableArray();
+            this.preparationTime = ko.observable();
+            this.title = ko.observable();
+
+            if(data)
+            {
+                this.cookingTime(data.cookingTime);
+                if(data.localizations) {
+                    for (var i = 0; i < data.localizations.length; i++) {
+                        this.localizations.push(new RecipePartLocalization(data.localizations[i]));
+                    }
+                }
+                this.preparationTime(data.preparationTime);
+            }
+
+            this.updateCurrentCulture = function(newCulture) {                
+                var newLocalization;
+                for (var i = 0; i < that.localizations().length; i++) {
+                    if (that.localizations()[i].culture() === newCulture) {
+                        newLocalization = that.localizations()[i];                    
+                    }
+                }
+                if (!newLocalization) {
+                    newLocalization = new RecipePartLocalization();
+                    newLocalization.culture(newCulture);
+                    that.localizations.push(newLocalization);
+                }
+                that.currentLocalization(newLocalization);
+            }
+        }
+        function RecipePartLocalization(data) {
+            var that = this;
+            this.culture = ko.observable();
+            this.description = ko.observable();
+            this.ingredients = ko.observableArray();
+            this.instructions = ko.observable();
+            this.name = ko.observable();
+
+            if(data)
+            {
+                this.culture(data.culture);
+                this.description(data.description);
+                if(data.ingredients) {
+                    for (var i = 0; i < data.ingredients.length; i++) {
+                        this.ingredients.push(new Ingredient(data.ingredients[i]));
+                    }
+                }
+                this.instructions(data.instructions);
+                this.name(data.name);
+            }
+
+            this.addNewIngredient = function () {
+                that.ingredients.push(new Ingredient());
+            }
+
+            this.removeIngredient = function (ingredient) {
+                that.ingredients.destroy(ingredient);
+            }
+
+            this.addNewIngredient();
+
+            //dependentObservable to represent the last row's value
+            this.lastIngredientValue = ko.dependentObservable(function () {
+                var ingredients = that.ingredients();
+                return ingredients.length ? ingredients[ingredients.length - 1].element() : null;
+            });
+
+            //subscribe to changes to the last row
+            this.lastIngredientValue.subscribe(function (newValue) {
+                if (newValue) {
+                    setTimeout(function () {
+                        that.addNewIngredient();
+                    }, 0);
+                }
+            });
+        }
+        function Ingredient(data) {
+            this.element = ko.observable();
+            this.quantity = ko.observable();
+            this.unit = ko.observable();
+            this.comment = ko.observable();
+            this.isOptional = ko.observable();
+        }
+
+        data = @Html.Raw(Json.Serialize(Model));
+
+        var ViewModel = function() {
+            var that = this;
+            this.recipe = new Recipe(data.recipe);
+            this.cultures = [  { key: 'en', text: 'English' }, { key: 'fr', text: 'French' } ];
+            this.selectedCulture = ko.observable();
+            this.selectedCulture.subscribe(function(newValue) {
+                that.recipe.updateCurrentCulture(newValue);
+            });
+            this.selectedCulture(this.cultures[0]);
+        };
+
+
+        vm = new ViewModel();
+
+        ko.applyBindings(vm);
+    </script>
+}
